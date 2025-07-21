@@ -1,15 +1,16 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { UserPermissionService } from './user-permission.service';
-import { CreatePermissionDto } from 'src/permission/dto/create-permission.dto';
-import { UserPermissionDocument } from 'src/schemas/user-permission.shema';
+import { UserPermissionDocument } from 'src/schemas/user-permission.schema';
+import { CreateUserPermissionDto } from './dto/create-user-permission.dto';
+import { UpdateUserPermissionDto } from './dto/update-user-permission.dto';
 
 @Controller('user-permission')
 export class UserPermissionController {
     constructor(private readonly userPermissionService: UserPermissionService) { }
 
     @Post()
-    async createUserPermission(@Body() createUserPermissionDto: CreatePermissionDto): Promise<UserPermissionDocument> {
+    async createUserPermission(@Body() createUserPermissionDto: CreateUserPermissionDto): Promise<UserPermissionDocument> {
         return this.userPermissionService.createUserPermission(createUserPermissionDto);
     }
 
@@ -26,7 +27,7 @@ export class UserPermissionController {
     @Patch(':id')
     async updateUserPermission(
         @Param('id') id: string,
-        @Body() updateUserPermissionDto: CreatePermissionDto
+        @Body() updateUserPermissionDto: UpdateUserPermissionDto
     ): Promise<UserPermissionDocument> {
         return this.userPermissionService.updateUserPermission(id, updateUserPermissionDto);
     }

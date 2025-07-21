@@ -2,14 +2,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreatePermissionDto } from 'src/permission/dto/create-permission.dto';
-import { UserPermission, UserPermissionDocument } from 'src/schemas/user-permission.shema';
+import { UserPermission, UserPermissionDocument } from 'src/schemas/user-permission.schema';
+import { CreateUserPermissionDto } from './dto/create-user-permission.dto';
+import { UpdateUserPermissionDto } from './dto/update-user-permission.dto';
 
 @Injectable()
 export class UserPermissionService {
     constructor(@InjectModel(UserPermission.name) private readonly userPermissionModel: Model<UserPermissionDocument>) { }
 
-    async createUserPermission(createUserPermissionDto: CreatePermissionDto): Promise<UserPermissionDocument> {
+    async createUserPermission(createUserPermissionDto: CreateUserPermissionDto): Promise<UserPermissionDocument> {
         const createdUserPermission = new this.userPermissionModel(createUserPermissionDto);
         return createdUserPermission.save();
     }
@@ -26,7 +27,7 @@ export class UserPermissionService {
         return userPermission;
     }
 
-    async updateUserPermission(id: string, updateUserPermissionDto: CreatePermissionDto): Promise<UserPermissionDocument> {
+    async updateUserPermission(id: string, updateUserPermissionDto: UpdateUserPermissionDto): Promise<UserPermissionDocument> {
         const updatedUserPermission = await this.userPermissionModel.findByIdAndUpdate(
             id,
             { $set: updateUserPermissionDto },

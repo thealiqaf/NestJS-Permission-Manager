@@ -1,15 +1,22 @@
 /* eslint-disable prettier/prettier */
-import { Module } from '@nestjs/common';
-import { UserPermissionController } from './user-permission.controller';
-import { UserPermissionService } from './user-permission.service';
+import { Module, DynamicModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserPermission, UserPermissionSchema } from 'src/schemas/user-permission.shema';
+import { UserPermission, UserPermissionSchema } from '../schemas/user-permission.schema';
+import { UserPermissionService } from './user-permission.service';
+import { UserPermissionController } from './user-permission.controller';
+import { PermissionGuard } from '../common/guards/permission.guard';
 
-@Module({
-  imports: [
-    MongooseModule.forFeature([{ name: UserPermission.name, schema: UserPermissionSchema }]),
-  ],
-  controllers: [UserPermissionController],
-  providers: [UserPermissionService],
-})
-export class UserPermissionModule { }
+@Module({})
+export class UserPermissionModule {
+  static forFeature(): DynamicModule {
+    return {
+      module: UserPermissionModule,
+      imports: [
+        MongooseModule.forFeature([{ name: UserPermission.name, schema: UserPermissionSchema }]),
+      ],
+      controllers: [UserPermissionController],
+      providers: [UserPermissionService, PermissionGuard],
+      exports: [UserPermissionService, PermissionGuard],
+    };
+  }
+}

@@ -1,0 +1,9 @@
+src/
+test/
+coverage/
+*.spec.ts
+node_modules/
+app.controller.ts
+app.service.ts
+app.module.ts
+main.ts
