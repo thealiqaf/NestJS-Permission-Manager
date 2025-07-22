@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 export * from './permission/permission.module';
 export * from './user-permission/user-permission.module';
 export * from './permission/permission.service';
@@ -11,3 +10,4 @@ export * from './permission/dto/create-permission.dto';
 export * from './permission/dto/update-permission.dto';
 export * from './user-permission/dto/create-user-permission.dto';
 export * from './user-permission/dto/update-user-permission.dto';
+export * from './common/services/logger.service';

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { UserPermissionService } from './user-permission.service';
 import { UserPermissionDocument } from 'src/schemas/user-permission.schema';

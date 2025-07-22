@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module, DynamicModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Permission, PermissionSchema } from '../schemas/permission.schema';

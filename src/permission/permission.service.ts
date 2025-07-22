@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Permission, PermissionDocument } from 'src/schemas/permission.schema';
 import { CreatePermissionDto } from './dto/create-permission.dto';

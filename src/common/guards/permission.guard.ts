@@ -1,7 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException, LoggerService, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserPermission, UserPermissionDocument } from '../../schemas/user-permission.schema';
@@ -13,25 +10,36 @@ export class PermissionGuard implements CanActivate {
         private readonly reflector: Reflector,
         @InjectModel(UserPermission.name)
         private readonly userPermissionModel: Model<UserPermissionDocument>,
+        private readonly logger: LoggerService,
     ) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const userId = request.user?.id;
-        const requiredPermissions = this.reflector.get<string[]>('requiredPermission', context.getHandler());
+        const requiredPermissions = this.reflector.get<string>('requiredPermission', context.getHandler());
 
-        if (!userId || !requiredPermissions) {
-            throw new ForbiddenException('User or permission not specified');
+        this.logger.log(`Checking permission '${requiredPermissions}' for user '${userId}'`);
+
+        if (!userId) {
+            this.logger.error('No user ID provided in request', undefined, 'PermissionGuard');
+            throw new UnauthorizedException('User not authenticated');
+        }
+
+        if (!requiredPermissions) {
+            this.logger.error('No permission specified for route', undefined, 'PermissionGuard');
+            throw new ForbiddenException('Permission not specified');
         }
 
         const userPermission = await this.userPermissionModel
-            .findOne({ userId, permissions: { $in: requiredPermissions } })
+            .findOne({ userId, permissions: requiredPermissions })
             .exec();
 
         if (!userPermission) {
+            this.logger.warn(`Permission '${requiredPermissions}' not found for user '${userId}'`);
             throw new ForbiddenException('User does not have required permission');
         }
 
+        this.logger.log(`Permission '${requiredPermissions}' granted for user '${userId}'`);
         return true;
     }
 }
