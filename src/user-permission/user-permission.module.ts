@@ -4,7 +4,7 @@ import { UserPermission, UserPermissionSchema } from '../schemas/user-permission
 import { UserPermissionService } from './user-permission.service';
 import { UserPermissionController } from './user-permission.controller';
 import { PermissionGuard } from '../common/guards/permission.guard';
-import { LoggerService } from 'src/common/services/logger.service';
+// import { LoggerService } from '../common/services/logger.service';
 
 @Module({})
 export class UserPermissionModule {
@@ -15,8 +15,8 @@ export class UserPermissionModule {
         MongooseModule.forFeature([{ name: UserPermission.name, schema: UserPermissionSchema }]),
       ],
       controllers: [UserPermissionController],
-      providers: [UserPermissionService, PermissionGuard, LoggerService],
-      exports: [UserPermissionService, PermissionGuard, LoggerService],
+      providers: [UserPermissionService, PermissionGuard],
+      exports: [UserPermissionService, PermissionGuard],
     };
   }
 }

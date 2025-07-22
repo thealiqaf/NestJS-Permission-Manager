@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserPermission, UserPermissionDocument } from 'src/schemas/user-permission.schema';
+import { UserPermission, UserPermissionDocument } from '../schemas/user-permission.schema';
 import { CreateUserPermissionDto } from './dto/create-user-permission.dto';
 import { UpdateUserPermissionDto } from './dto/update-user-permission.dto';
 
