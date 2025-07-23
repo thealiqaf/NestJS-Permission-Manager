@@ -1,17 +1,32 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserPermission, UserPermissionDocument } from '../schemas/user-permission.schema';
 import { CreateUserPermissionDto } from './dto/create-user-permission.dto';
 import { UpdateUserPermissionDto } from './dto/update-user-permission.dto';
+import { LoggerService } from '../common/services/logger.service';
 
 @Injectable()
 export class UserPermissionService {
-    constructor(@InjectModel(UserPermission.name) private readonly userPermissionModel: Model<UserPermissionDocument>) { }
+    constructor(@InjectModel(UserPermission.name) private readonly userPermissionModel: Model<UserPermissionDocument>,
+        private readonly logger: LoggerService
+    ) { }
 
     async createUserPermission(createUserPermissionDto: CreateUserPermissionDto): Promise<UserPermissionDocument> {
-        const createdUserPermission = new this.userPermissionModel(createUserPermissionDto);
-        return createdUserPermission.save();
+        try {
+            const createdUserPermission = new this.userPermissionModel(createUserPermissionDto);
+            this.logger.log(`Creating user permission: ${UserPermission.name} with data: ${JSON.stringify(createUserPermissionDto)}`);
+            return await createdUserPermission.save();
+        } catch (error) {
+            if (error.code === 11000) {
+                // Mongo duplicate key error
+                this.logger.warn(`Duplicate user permission label: ${JSON.stringify(error.keyValue)}`);
+                throw new ConflictException('Permission label already exists.');
+            }
+
+            this.logger.error(`Failed to create user permission: ${error.message}`);
+            throw error;
+        }
     }
 
     async findAllUserPermissions(): Promise<UserPermissionDocument[]> {
@@ -35,6 +50,7 @@ export class UserPermissionService {
         if (!updatedUserPermission) {
             throw new NotFoundException('User Permission not found');
         }
+        this.logger.log(`Updating user permission with ID ${id}: ${JSON.stringify(updateUserPermissionDto)}`);
         return updatedUserPermission;
     }
 
@@ -43,6 +59,7 @@ export class UserPermissionService {
         if (!deletedUserPermission) {
             throw new NotFoundException('User Permission not found');
         }
+        this.logger.log(`Deleting user permission with ID ${id}`);
         return deletedUserPermission;
     }
 }

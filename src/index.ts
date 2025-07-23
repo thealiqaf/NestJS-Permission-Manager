@@ -12,4 +12,5 @@ export * from './user-permission/dto/create-user-permission.dto';
 export * from './user-permission/dto/update-user-permission.dto';
 export * from './permission/permission.controller'
 export * from './user-permission/user-permission.controller'
-// export * from './common/services/logger.service';
+export * from './common/services/logger.service';
+export * from './common/services/logger.module';

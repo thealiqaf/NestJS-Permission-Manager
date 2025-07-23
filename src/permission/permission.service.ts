@@ -4,13 +4,18 @@ import { CreatePermissionDto } from './dto/create-permission.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
+import { LoggerService } from '../common/services/logger.service';
 
 @Injectable()
 export class PermissionService {
-    constructor(@InjectModel(Permission.name) private readonly permissionModel: Model<PermissionDocument>) { }
+    constructor(
+        @InjectModel(Permission.name) private readonly permissionModel: Model<PermissionDocument>,
+        private readonly logger: LoggerService
+    ) { }
 
     async createPermission(createPermissionDto: CreatePermissionDto): Promise<PermissionDocument> {
         const permission = new this.permissionModel(createPermissionDto);
+        this.logger.log(`Creating permission: ${Permission.name} with data: ${JSON.stringify(createPermissionDto)}`);
         return await permission.save();
     }
 
@@ -36,7 +41,7 @@ export class PermissionService {
         if (!updatedPermission) {
             throw new NotFoundException('Permission not found');
         }
-
+        this.logger.log(`Updating permission with ID ${id}: ${JSON.stringify(updatePermissionDto)}`);
         return updatedPermission;
     }
 
@@ -45,6 +50,7 @@ export class PermissionService {
         if (!deletedPermission) {
             throw new NotFoundException('Permission not found');
         }
+        this.logger.log(`Deleting permission with ID ${id}`);
         return deletedPermission;
     }
 }
