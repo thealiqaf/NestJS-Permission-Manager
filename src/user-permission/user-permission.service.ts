@@ -59,7 +59,7 @@ export class UserPermissionService {
     }
 
     async findAllUserPermissions(): Promise<UserPermissionDocument[]> {
-        return this.userPermissionModel.find().populate('permissions');
+        return this.userPermissionModel.find().populate('permissions').lean();
     }
 
     async findUserPermissionById(id: string): Promise<UserPermissionDocument> {

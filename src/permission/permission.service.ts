@@ -65,9 +65,11 @@ export class PermissionService {
             { $set: updates },
             { new: true, runValidators: true }
         );
+
         if (!updatedPermission) {
             throw new NotFoundException('Permission not found');
         }
+
         this.logger.log(`Updating permission with ID ${id}: ${JSON.stringify(updatePermissionDto)}`);
         return updatedPermission;
     }
