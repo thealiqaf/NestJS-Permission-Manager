@@ -1,25 +1,27 @@
-# nestjs-permission-manager
+# NestJS Permission Manager
 
 A robust and flexible permission and role management module for NestJS applications using Mongoose. This package provides a comprehensive solution for managing permissions and user permission assignments, complete with decorators, guards, and exception handling to secure your application endpoints.
 
 ## Table of Contents
-- [Features](#features)
-- [Installation](#installation)
-- [Setup](#setup)
-- [Usage](#usage)
-  - [Permission Management](#permission-management)
-  - [User Permission Management](#user-permission-management)
-  - [Protecting Endpoints with Permission Guard](#protecting-endpoints-with-permission-guard)
-- [API Endpoints](#api-endpoints)
-  - [Permission Endpoints](#permission-endpoints)
-  - [User Permission Endpoints](#user-permission-endpoints)
-- [Error Handling](#error-handling)
-- [Logging](#logging)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+
+- Features
+- Installation
+- Setup
+- Usage
+  - Permission Management
+  - User Permission Management
+  - Protecting Endpoints with Permission Guard
+- API Endpoints
+  - Permission Endpoints
+  - User Permission Endpoints
+- Error Handling
+- Logging
+- Project Structure
+- Contributing
+- License
 
 ## Features
+
 - **Dynamic Module Integration**: Seamlessly integrates with NestJS using dynamic modules.
 - **Mongoose Schemas**: Predefined schemas for permissions and user permissions.
 - **CRUD Operations**: Full support for creating, reading, updating, and deleting permissions and user permission assignments.
@@ -30,26 +32,29 @@ A robust and flexible permission and role management module for NestJS applicati
 - **Validation**: Uses `class-validator` for DTO validation to ensure data integrity.
 
 ## Installation
+
 Install the package via npm:
 
-```bash
-npm install nestjs-permission-manager
+```
+npm install @thealiqaf/nestjs-permission-management
 ```
 
 Ensure you have the following peer dependencies installed in your NestJS project:
 
-```bash
+```
 npm install @nestjs/core @nestjs/common @nestjs/mongoose mongoose class-validator
 ```
 
 ## Setup
+
 1. **Register the Modules**:
    Import and register the `PermissionModule` and `UserPermissionModule` in your NestJS application.
 
-   ```typescript
+   ```
    import { Module } from '@nestjs/common';
    import { MongooseModule } from '@nestjs/mongoose';
-   import { PermissionModule, UserPermissionModule } from 'nestjs-permission-manager';
+   import { PermissionModule } from '@thealiqaf/nestjs-permission-management';
+   import { UserPermissionModule } from '@thealiqaf/nestjs-permission-management';
 
    @Module({
      imports: [
@@ -64,10 +69,10 @@ npm install @nestjs/core @nestjs/common @nestjs/mongoose mongoose class-validato
 2. **Apply Global Exception Filter**:
    Add the `GlobalExceptionFilter` to handle errors globally.
 
-   ```typescript
+   ```
    import { NestFactory } from '@nestjs/core';
    import { AppModule } from './app.module';
-   import { GlobalExceptionFilter } from 'nestjs-permission-manager';
+   import { GlobalExceptionFilter } from '@thealiqaf/nestjs-permission-management';
 
    async function bootstrap() {
      const app = await NestFactory.create(AppModule);
@@ -80,12 +85,13 @@ npm install @nestjs/core @nestjs/common @nestjs/mongoose mongoose class-validato
 ## Usage
 
 ### Permission Management
+
 The `PermissionModule` provides functionality to manage permissions, including creating, retrieving, updating, and deleting permissions.
 
 **Example: Creating a Permission**
 
-```typescript
-import { CreatePermissionDto } from 'nestjs-permission-manager';
+```
+import { CreatePermissionDto } from '@thealiqaf/nestjs-permission-management';
 
 const createPermissionDto: CreatePermissionDto = {
   name: 'read:users',
@@ -100,12 +106,13 @@ const response = await fetch('http://localhost:3000/permission/create', {
 ```
 
 ### User Permission Management
+
 The `UserPermissionModule` allows assigning permissions to users and managing these assignments.
 
 **Example: Assigning Permissions to a User**
 
-```typescript
-import { CreateUserPermissionDto } from 'nestjs-permission-manager';
+```
+import { CreateUserPermissionDto } from '@thealiqaf/nestjs-permission-management';
 
 const createUserPermissionDto: CreateUserPermissionDto = {
   userId: '507f1f77bcf86cd799439011',
@@ -121,13 +128,14 @@ const response = await fetch('http://localhost:3000/user-permission/create', {
 ```
 
 ### Protecting Endpoints with Permission Guard
+
 Use the `@RequiredPermission` decorator and `PermissionGuard` to protect your endpoints.
 
 **Example: Protecting a Controller**
 
-```typescript
+```
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { RequiredPermission, PermissionGuard } from 'nestjs-permission-manager';
+import { RequiredPermission, PermissionGuard } from '@thealiqaf/nestjs-permission-management';
 
 @Controller('protected')
 @UseGuards(PermissionGuard)
@@ -143,6 +151,7 @@ export class ProtectedController {
 ## API Endpoints
 
 ### Permission Endpoints
+
 | Method | Endpoint                | Description                         | Request Body                     | Response                     |
 |--------|-------------------------|-------------------------------------|----------------------------------|------------------------------|
 | POST   | `/permission/create`    | Create a new permission             | `CreatePermissionDto`            | `Permission`                 |
@@ -152,6 +161,7 @@ export class ProtectedController {
 | DELETE | `/permission/:id`       | Delete a permission                 | -                                | `Permission`                 |
 
 ### User Permission Endpoints
+
 | Method | Endpoint                      | Description                           | Request Body                     | Response                     |
 |--------|-------------------------------|---------------------------------------|----------------------------------|------------------------------|
 | POST   | `/user-permission/create`     | Create a new user permission          | `CreateUserPermissionDto`        | `UserPermission`             |
@@ -161,46 +171,49 @@ export class ProtectedController {
 | DELETE | `/user-permission/:id`        | Delete a user permission              | -                                | -                            |
 
 ### DTO Schemas
+
 - **CreatePermissionDto**:
 
-  ```typescript
-  {
-    name: string; // Required, unique
-    description: string; // Required
-  }
-  ```
+```
+{
+  name: string; // Required, unique
+  description: string; // Required
+}
+```
 
 - **UpdatePermissionDto**:
 
-  ```typescript
-  {
-    name?: string; // Optional
-    description?: string; // Optional
-  }
-  ```
+```
+{
+  name?: string; // Optional
+  description?: string; // Optional
+}
+```
 
 - **CreateUserPermissionDto**:
 
-  ```typescript
-  {
-    userId: string; // Required, valid MongoDB ObjectId
-    label: string; // Required
-    permissions: string[]; // Required, array of valid permission IDs
-  }
-  ```
+```
+{
+  userId: string; // Required, valid MongoDB ObjectId
+  label: string; // Required
+  permissions: string[]; // Required, array of valid permission IDs
+}
+```
 
 - **UpdateUserPermissionDto**:
 
-  ```typescript
-  {
-    userId?: string; // Optional
-    label?: string; // Optional
-    permissions?: string[]; // Optional, array of valid permission IDs
-  }
-  ```
+```
+{
+  userId?: string; // Optional
+  label?: string; // Optional
+  permissions?: string[]; // Optional, array of valid permission IDs
+}
+```
 
 ## Error Handling
-The package includes a `GlobalExceptionFilter` that catches and formats errors, providing consistent error responses. Common HTTP status codes include:
+
+The `GlobalExceptionFilter` catches and formats errors, providing consistent error responses. Common HTTP status codes include:
+
 - **400 Bad Request**: Invalid input (e.g., invalid ObjectId, missing required fields).
 - **404 Not Found**: Resource (e.g., permission or user permission) not found.
 - **409 Conflict**: Duplicate resource (e.g., permission name already exists).
@@ -209,17 +222,19 @@ The package includes a `GlobalExceptionFilter` that catches and formats errors, 
 
 **Example Error Response**:
 
-```json
+```
 {
   "statusCode": 404,
   "message": "Permission not found",
   "path": "/permission/123",
-  "timestamp": "2025-07-24T15:25:00.000Z"
+  "timestamp": "2025-07-24T15:48:00.000Z"
 }
 ```
 
 ## Logging
+
 The `LoggerModule` provides a `LoggerService` for logging operations. It logs:
+
 - Permission creation, updates, and deletions.
 - User permission creation, updates, and deletions.
 - Errors and unexpected exceptions.
@@ -227,8 +242,9 @@ The `LoggerModule` provides a `LoggerService` for logging operations. It logs:
 Logs are output using NestJS's built-in `Logger` with contextual information.
 
 ## Project Structure
+
 ```
-nestjs-permission-manager/
+@thealiqaf/nestjs-permission-management/
 ├── common/
 │   ├── decorators/
 │   │   └── permission.decorator.ts
@@ -260,14 +276,17 @@ nestjs-permission-manager/
 ```
 
 ## Contributing
+
 Contributions are welcome! Please follow these steps:
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/your-feature`).
-3. Commit your changes (`git commit -m 'Add your feature'`).
-4. Push to the branch (`git push origin feature/your-feature`).
-5. Open a pull request.
+
+- Fork the repository.
+- Create a feature branch (`git checkout -b feature/your-feature`).
+- Commit your changes (`git commit -m 'Add your feature'`).
+- Push to the branch (`git push origin feature/your-feature`).
+- Open a pull request.
 
 Ensure your code follows the existing style and includes tests.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+This project is licensed under the MIT License. See the LICENSE file for details.
