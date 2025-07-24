@@ -4,19 +4,19 @@ import { Injectable, Logger } from "@nestjs/common";
 export class LoggerService {
     private readonly logger = new Logger(LoggerService.name);
 
-    log(message: string, context?: string) {
-        this.logger.log(message, context);
+    log(message: string) {
+        this.logger.log(message);
     }
 
-    error(message: string, trace?: string, context?: string) {
-        this.logger.error(message, trace, context);
+    error(message: string, trace?: string) {
+        this.logger.error(message, trace);
     }
 
-    warn(message: string, context?: string) {
-        this.logger.warn(message, context);
+    warn(message: string) {
+        this.logger.warn(message);
     }
 
-    debug(message: string, context?: string) {
-        this.logger.debug(message, context);
+    debug(message: string) {
+        this.logger.debug(message);
     }
 }

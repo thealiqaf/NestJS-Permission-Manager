@@ -1,15 +1,16 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
+import mongoose from "mongoose";
 
 export class UpdateUserPermissionDto {
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     userId?: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     label?: string;
 
     @IsString({ each: true })
-    @IsNotEmpty({ each: true })
-    permissions?: string[];
+    @IsOptional({ each: true })
+    permissions?: (string | mongoose.Types.ObjectId)[]; // Allow both ObjectId and string types for permissions
 }

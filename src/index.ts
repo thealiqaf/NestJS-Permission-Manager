@@ -14,3 +14,4 @@ export * from './permission/permission.controller'
 export * from './user-permission/user-permission.controller'
 export * from './common/services/logger.service';
 export * from './common/services/logger.module';
+export * from './common/filters/global-exception.filter';
