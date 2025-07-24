@@ -3,22 +3,21 @@
 A robust and flexible permission and role management module for NestJS applications using Mongoose. This package provides a comprehensive solution for managing permissions and user permission assignments, complete with decorators, guards, and exception handling to secure your application endpoints.
 
 ## Table of Contents
-
-- Features
-- Installation
-- Setup
-- Usage
-  - Permission Management
-  - User Permission Management
-  - Protecting Endpoints with Permission Guard
-- API Endpoints
-  - Permission Endpoints
-  - User Permission Endpoints
-- Error Handling
-- Logging
-- Project Structure
-- Contributing
-- License
+- [Features](#features)
+- [Installation](#installation)
+- [Setup](#setup)
+- [Usage](#usage)
+  - [Permission Management](#permission-management)
+  - [User Permission Management](#user-permission-management)
+  - [Protecting Endpoints with Permission Guard](#protecting-endpoints-with-permission-guard)
+- [API Endpoints](#api-endpoints)
+  - [Permission Endpoints](#permission-endpoints)
+  - [User Permission Endpoints](#user-permission-endpoints)
+- [Error Handling](#error-handling)
+- [Logging](#logging)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
