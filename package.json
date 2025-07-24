@@ -1,6 +1,6 @@
 {
   "name": "@thealiqaf/nestjs-permission-management",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A NestJS module for permission management",
   "author": "Ali Ghorbani <aliqaf.s3@gmail.com>",
   "private": false,
